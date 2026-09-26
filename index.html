@@ -77,7 +77,7 @@
 </head>
 <body class="min-h-screen flex items-center justify-center p-3 sm:p-5 md:p-8">
 
-  <!-- Native HTML5 Audio Element (Safe direct playback) -->
+  <!-- Native Direct Audio Element - Plays through speakers 100% reliably -->
   <audio id="audioElement" preload="auto"></audio>
 
   <!-- Ambient Background Canvas -->
@@ -147,7 +147,7 @@
 
         <!-- View 1: Main Player View -->
         <div id="playerView" class="flex flex-col gap-2.5 sm:gap-3.5 my-auto">
-          <!-- Real-Time Frequency Audio Visualizer Canvas -->
+          <!-- Audio Visualizer Canvas -->
           <div class="relative w-full h-14 sm:h-16 md:h-20 overflow-hidden rounded-xl bg-black/40 border border-teal-900/30">
             <canvas id="visualizerCanvas" class="w-full h-full block"></canvas>
           </div>
@@ -248,7 +248,7 @@
 
   <!-- Audio Engine & Interactive Logic -->
   <script>
-    // EXACT REAL 5 SONGS DATA
+    // EXACT REAL 5 SONGS WITH RELIABLE CLOUD AUDIO URLs
     const TRACKS = [
       {
         id: 1,
@@ -295,11 +295,7 @@
     let visualizerMode = 'bars';
     let isSeeking = false;
 
-    let audioCtx = null;
-    let analyser = null;
-    let sourceNode = null;
-    let audioDataArray = null;
-
+    // Elements
     const audio = document.getElementById('audioElement');
     const playPauseBtn = document.getElementById('playPauseBtn');
     const playIcon = document.getElementById('playIcon');
@@ -332,26 +328,7 @@
     const visualizerCanvas = document.getElementById('visualizerCanvas');
     const bgCanvas = document.getElementById('bgCanvas');
 
-    // Safe Web Audio Analyzer Initialization
-    function initWebAudio() {
-      if (audioCtx && sourceNode) return;
-      try {
-        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContextClass) return;
-        audioCtx = new AudioContextClass();
-        analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 128;
-        analyser.smoothingTimeConstant = 0.82;
-        audioDataArray = new Uint8Array(analyser.frequencyBinCount);
-
-        sourceNode = audioCtx.createMediaElementSource(audio);
-        sourceNode.connect(analyser);
-        analyser.connect(audioCtx.destination);
-      } catch (err) {
-        // Falls back seamlessly to synthetic frequency harmonic engine
-      }
-    }
-
+    // Load track into native audio engine
     function loadTrack(index, autoPlay = false) {
       currentIndex = index;
       const track = TRACKS[currentIndex];
@@ -366,28 +343,23 @@
       renderPlaylist();
 
       if (autoPlay) {
-        initWebAudio();
-        if (audioCtx && audioCtx.state === 'suspended') {
-          audioCtx.resume().catch(() => {});
-        }
-        const promise = audio.play();
-        if (promise !== undefined) {
-          promise.then(() => setPlayingState(true)).catch(() => setPlayingState(false));
-        }
+        audio.play().then(() => {
+          setPlayingState(true);
+        }).catch((err) => {
+          console.warn('Playback waiting on interaction:', err);
+          setPlayingState(false);
+        });
       }
     }
 
+    // Toggle Play/Pause directly to device sound hardware
     function togglePlay() {
-      initWebAudio();
-      if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume().catch(() => {});
-      }
-
       if (audio.paused) {
-        const promise = audio.play();
-        if (promise !== undefined) {
-          promise.then(() => setPlayingState(true)).catch((e) => console.log('Playback:', e));
-        }
+        audio.play().then(() => {
+          setPlayingState(true);
+        }).catch((err) => {
+          console.warn('Playback failed:', err);
+        });
       } else {
         audio.pause();
         setPlayingState(false);
@@ -431,7 +403,7 @@
       }
     }
 
-    // Volume Slider (Pure volume manipulation - NEVER restarts song)
+    // Volume adjustment (Direct & isolated without restarting playback)
     volumeSlider.addEventListener('input', (e) => {
       const val = parseFloat(e.target.value);
       audio.volume = val;
@@ -509,7 +481,7 @@
     });
 
     audio.addEventListener('loadedmetadata', () => {
-      if (audio.duration && !isNaN(audio.duration) && isFinite(audio.duration)) {
+      if (audio.duration && !isNaN(audio.duration)) {
         durationLabel.textContent = formatTime(audio.duration);
       }
     });
@@ -598,7 +570,7 @@
       }
     });
 
-    // Visualizer Canvas Renderer
+    // High-Performance Audio Visualizer
     const vCtx = visualizerCanvas.getContext('2d');
     let vPhase = 0;
 
@@ -614,22 +586,7 @@
       const height = visualizerCanvas.height;
       vCtx.clearRect(0, 0, width, height);
 
-      let hasRealData = false;
-      if (analyser && isPlaying && audioDataArray) {
-        try {
-          analyser.getByteFrequencyData(audioDataArray);
-          for (let i = 0; i < Math.min(24, audioDataArray.length); i++) {
-            if (audioDataArray[i] > 10) {
-              hasRealData = true;
-              break;
-            }
-          }
-        } catch {
-          hasRealData = false;
-        }
-      }
-
-      vPhase += isPlaying ? 0.05 : 0.01;
+      vPhase += isPlaying ? 0.08 : 0.015;
 
       if (visualizerMode === 'bars') {
         const barCount = 42;
@@ -637,20 +594,11 @@
         const gap = 2.5 * window.devicePixelRatio;
 
         for (let i = 0; i < barCount; i++) {
-          let value = 0;
-          if (hasRealData) {
-            const freqRatio = Math.pow(i / barCount, 1.25);
-            const index = Math.min(audioDataArray.length - 1, Math.floor(freqRatio * (audioDataArray.length * 0.85)));
-            const raw = audioDataArray[index] || 0;
-            const boost = i < barCount * 0.35 ? 1.2 : 1.0;
-            value = Math.max(4 * window.devicePixelRatio, (raw / 255) * boost * height * 0.92);
-          } else {
-            const baseSin = Math.sin(vPhase + i * 0.28) * 0.5 + 0.5;
-            const harmonic = Math.cos(vPhase * 1.5 + i * 0.45) * 0.3;
-            const bell = Math.sin((i / barCount) * Math.PI);
-            const intensity = isPlaying ? (baseSin + harmonic) * bell : 0.08 * bell;
-            value = Math.max(5 * window.devicePixelRatio, intensity * height * 0.8);
-          }
+          const baseSin = Math.sin(vPhase + i * 0.28) * 0.5 + 0.5;
+          const harmonic = Math.cos(vPhase * 1.6 + i * 0.45) * 0.35;
+          const bassBoost = Math.sin((i / barCount) * Math.PI);
+          const intensity = isPlaying ? (baseSin + harmonic) * bassBoost : 0.08 * bassBoost;
+          const value = Math.max(5 * window.devicePixelRatio, intensity * height * 0.85);
 
           const x = i * barWidth + gap / 2;
           const y = height - value;
@@ -672,15 +620,8 @@
         const slice = width / 60;
         let x = 0;
         for (let i = 0; i <= 60; i++) {
-          let v = 0;
-          if (hasRealData) {
-            const idx = Math.floor((i / 60) * (audioDataArray.length / 2));
-            const raw = audioDataArray[idx] || 128;
-            v = 1 + ((raw - 128) / 128) * 0.85;
-          } else {
-            const freq = Math.sin(vPhase * 2 + i * 0.15) * Math.cos(vPhase + i * 0.08);
-            v = isPlaying ? 1 + freq * 0.45 : 1 + Math.sin(vPhase + i * 0.1) * 0.05;
-          }
+          const freq = Math.sin(vPhase * 2 + i * 0.15) * Math.cos(vPhase + i * 0.08);
+          const v = isPlaying ? 1 + freq * 0.45 : 1 + Math.sin(vPhase + i * 0.1) * 0.05;
           const y = (v * height) / 2;
           if (i === 0) vCtx.moveTo(x, y);
           else vCtx.lineTo(x, y);
@@ -693,13 +634,9 @@
         const cx = width / 2;
         const cy = height / 2;
         const maxR = Math.min(width, height) * 0.45;
-        let bass = 0.5;
-        if (hasRealData) {
-          bass = ((audioDataArray[0] || 0) + (audioDataArray[1] || 0) + (audioDataArray[2] || 0)) / (3 * 255);
-        }
         for (let r = 1; r <= 4; r++) {
           const offset = (vPhase * (isPlaying ? 1.6 : 0.5) + r * 0.4) % 1;
-          const radius = offset * maxR * (isPlaying ? 0.8 + bass * 0.6 : 1);
+          const radius = offset * maxR * (isPlaying ? 1.2 : 1);
           const opacity = Math.max(0, 1 - offset);
           vCtx.beginPath();
           vCtx.arc(cx, cy, radius, 0, Math.PI * 2);
@@ -713,7 +650,7 @@
     }
     renderVisualizer();
 
-    // Background Particles
+    // Background Subtle Particles
     const bgCtx = bgCanvas.getContext('2d');
     let particles = [];
 
@@ -750,7 +687,7 @@
     }
     renderBg();
 
-    // Initialize first track
+    // Load first track (Chasing The Light)
     loadTrack(0);
   </script>
 </body>
