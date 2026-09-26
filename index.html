@@ -77,10 +77,10 @@
 </head>
 <body class="min-h-screen flex items-center justify-center p-3 sm:p-5 md:p-8">
 
-  <!-- Native HTML5 Audio Element with CORS -->
-  <audio id="audioElement" preload="auto" crossorigin="anonymous"></audio>
+  <!-- Native HTML5 Audio Element (Safe direct playback) -->
+  <audio id="audioElement" preload="auto"></audio>
 
-  <!-- Ambient Background Particles Canvas -->
+  <!-- Ambient Background Canvas -->
   <canvas id="bgCanvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
 
   <!-- Main Responsive Container -->
@@ -94,7 +94,7 @@
     <!-- Center Section: Mobile-stacked, Tablet/Desktop side-by-side with Exact Same Height -->
     <div class="w-full flex flex-col md:flex-row items-center justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-10">
       
-      <!-- Left Column: Photo Card (Proportional 400:617, No extra borders, matching desktop height) -->
+      <!-- Left Column: Photo Card (400:617 Proportional Aspect Ratio, No extra borders, matching desktop height) -->
       <div 
         id="photoCard"
         class="relative shrink-0 overflow-hidden rounded-[20px] sm:rounded-[26px] border-[2px] sm:border-[3px] border-[#0e8388] bg-[#021316] shadow-[0_15px_40px_rgba(0,0,0,0.95)] h-[270px] sm:h-[340px] md:h-[420px] lg:h-[440px] transition-all duration-300"
@@ -137,8 +137,8 @@
         <!-- Header: Track Info & Counter -->
         <div class="flex items-center justify-between border-b border-teal-800/30 pb-2 px-1">
           <div class="min-w-0 text-left">
-            <h2 id="trackTitle" class="text-sm sm:text-base md:text-lg font-bold text-white truncate tracking-tight">Bola</h2>
-            <p id="trackArtist" class="text-[11px] sm:text-xs text-teal-300/80 font-mono mt-0.5">PolaXat Exclusive</p>
+            <h2 id="trackTitle" class="text-sm sm:text-base md:text-lg font-bold text-white truncate tracking-tight">Chasing The Light</h2>
+            <p id="trackArtist" class="text-[11px] sm:text-xs text-teal-300/80 font-mono mt-0.5">PolaXat</p>
           </div>
           <div class="flex items-center gap-1.5 shrink-0 text-teal-400 font-mono text-[10px] sm:text-[11px] bg-teal-950/70 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg border border-teal-800/40">
             <span id="trackCounter" class="tabular-nums">1 / 5</span>
@@ -157,7 +157,7 @@
             <input id="progressBar" type="range" min="0" max="100" value="0" step="0.1" class="w-full h-1.5 sm:h-2" />
             <div class="flex items-center justify-between text-[11px] sm:text-xs font-mono text-teal-400/80 tabular-nums px-0.5">
               <span id="currentTimeLabel">00:00</span>
-              <span id="durationLabel">00:00</span>
+              <span id="durationLabel">03:42</span>
             </div>
           </div>
 
@@ -248,41 +248,42 @@
 
   <!-- Audio Engine & Interactive Logic -->
   <script>
+    // EXACT REAL 5 SONGS DATA
     const TRACKS = [
       {
         id: 1,
-        title: 'Bola',
-        artist: 'PolaXat Exclusive',
+        title: 'Chasing The Light',
+        artist: 'PolaXat',
         url: 'https://audio.jukehost.co.uk/01a0ded7-e53d-7242-88ed-d17a7c1bd33b',
         duration: '03:42'
       },
       {
         id: 2,
-        title: 'Midnight Echoes',
-        artist: 'PolaXat Originals',
-        url: 'https://audio.jukehost.co.uk/39a66d03-e840-7711-ab3f-a18fe1ce3d30',
-        duration: '02:58'
-      },
-      {
-        id: 3,
-        title: 'Cyber Mirage',
-        artist: 'PolaXat Beats',
-        url: 'https://audio.jukehost.co.uk/bd793574-e3c3-7183-b7aa-369b7cbdd463',
+        title: 'Crashing To The Ground',
+        artist: 'PolaXat',
+        url: 'https://audio.jukehost.co.uk/01a0ded7-e4e3-70b0-ae1b-61f4abe3b6ea',
         duration: '03:15'
       },
       {
+        id: 3,
+        title: 'Dance in Dark',
+        artist: 'PolaXat',
+        url: 'https://audio.jukehost.co.uk/01a0ded7-e4d9-73f2-879b-ffb79782a2b4',
+        duration: '03:54'
+      },
+      {
         id: 4,
-        title: 'Neon Horizon',
-        artist: 'PolaXat Synth',
-        url: 'https://audio.jukehost.co.uk/943fe06c-843c-78d1-b541-6e47d4653664',
-        duration: '04:10'
+        title: 'Spark in Dark',
+        artist: 'PolaXat',
+        url: 'https://audio.jukehost.co.uk/01a0ded7-e4da-73f5-b5b6-e36ed6dd9201',
+        duration: '03:28'
       },
       {
         id: 5,
-        title: 'Pulse of Light',
-        artist: 'PolaXat Studio',
-        url: 'https://audio.jukehost.co.uk/c32980fa-40fe-77b5-b778-4395420367eb',
-        duration: '03:30'
+        title: 'Unstoppable Tonight',
+        artist: 'PolaXat',
+        url: 'https://audio.jukehost.co.uk/01a0ded7-e53d-7056-9ecb-21313220f99c',
+        duration: '04:02'
       }
     ];
 
@@ -331,6 +332,7 @@
     const visualizerCanvas = document.getElementById('visualizerCanvas');
     const bgCanvas = document.getElementById('bgCanvas');
 
+    // Safe Web Audio Analyzer Initialization
     function initWebAudio() {
       if (audioCtx && sourceNode) return;
       try {
@@ -346,7 +348,7 @@
         sourceNode.connect(analyser);
         analyser.connect(audioCtx.destination);
       } catch (err) {
-        console.warn('Web Audio note:', err);
+        // Falls back seamlessly to synthetic frequency harmonic engine
       }
     }
 
@@ -354,6 +356,7 @@
       currentIndex = index;
       const track = TRACKS[currentIndex];
       audio.src = track.url;
+      audio.load();
       trackTitle.textContent = track.title;
       trackArtist.textContent = track.artist;
       trackCounter.textContent = `${currentIndex + 1} / ${TRACKS.length}`;
@@ -365,20 +368,26 @@
       if (autoPlay) {
         initWebAudio();
         if (audioCtx && audioCtx.state === 'suspended') {
-          audioCtx.resume();
+          audioCtx.resume().catch(() => {});
         }
-        audio.play().then(() => setPlayingState(true)).catch(() => setPlayingState(false));
+        const promise = audio.play();
+        if (promise !== undefined) {
+          promise.then(() => setPlayingState(true)).catch(() => setPlayingState(false));
+        }
       }
     }
 
     function togglePlay() {
       initWebAudio();
       if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume();
+        audioCtx.resume().catch(() => {});
       }
 
       if (audio.paused) {
-        audio.play().then(() => setPlayingState(true)).catch((e) => console.log('Play note:', e));
+        const promise = audio.play();
+        if (promise !== undefined) {
+          promise.then(() => setPlayingState(true)).catch((e) => console.log('Playback:', e));
+        }
       } else {
         audio.pause();
         setPlayingState(false);
@@ -422,7 +431,7 @@
       }
     }
 
-    // Volume Slider (Smooth, does not restart track)
+    // Volume Slider (Pure volume manipulation - NEVER restarts song)
     volumeSlider.addEventListener('input', (e) => {
       const val = parseFloat(e.target.value);
       audio.volume = val;
@@ -500,7 +509,7 @@
     });
 
     audio.addEventListener('loadedmetadata', () => {
-      if (audio.duration && !isNaN(audio.duration)) {
+      if (audio.duration && !isNaN(audio.duration) && isFinite(audio.duration)) {
         durationLabel.textContent = formatTime(audio.duration);
       }
     });
@@ -508,7 +517,7 @@
     audio.addEventListener('ended', () => {
       if (repeatMode === 'one') {
         audio.currentTime = 0;
-        audio.play();
+        audio.play().catch(() => {});
       } else {
         playNext();
       }
