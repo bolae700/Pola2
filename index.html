@@ -6,10 +6,10 @@
   <title>PolaXat — Exclusive Audio Player & Visualizer</title>
   <meta name="description" content="PolaXat Official Music Player featuring Bola with real-time audio visualizer." />
 
-  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+  <!-- Google Fonts: Cairo, Plus Jakarta Sans & Outfit -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;800;900&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@700;800;900&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -35,6 +35,10 @@
       letter-spacing: 0.12em;
     }
 
+    .font-arabic {
+      font-family: 'Cairo', 'Plus Jakarta Sans', system-ui, sans-serif;
+    }
+
     /* Range inputs */
     input[type=range] {
       -webkit-appearance: none;
@@ -50,8 +54,12 @@
       border-radius: 50%;
       background: #5eead4;
       cursor: pointer;
-      box-shadow: 0 0 8px rgba(94, 234, 212, 0.8);
+      box-shadow: 0 0 10px rgba(94, 234, 212, 0.9);
       margin-top: -3.5px;
+      transition: transform 0.15s ease;
+    }
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.25);
     }
     input[type=range]::-webkit-slider-runnable-track {
       width: 100%;
@@ -86,70 +94,130 @@
   <!-- Main Responsive Container -->
   <div class="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center justify-center py-2 sm:py-4 md:py-6">
     
-    <!-- Top Header: Responsive Fluid "PolaXat" -->
-    <h1 class="brand-title text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#0f8b8d] select-none text-center drop-shadow-[0_4px_20px_rgba(15,139,141,0.4)] mb-3 sm:mb-4 md:mb-6 leading-none">
-      PolaXat
-    </h1>
+    <!-- Top Header Row: PolaXat + Single Unique YouTube Button -->
+    <header class="w-full flex flex-col items-center justify-center mb-3 sm:mb-5">
+      <div class="flex flex-col sm:flex-row items-center justify-between w-full max-w-3xl px-2 gap-3 mb-1">
+        
+        <!-- Brand Title -->
+        <div class="flex-1 text-center sm:text-left">
+          <h1 class="brand-title text-4xl sm:text-5xl md:text-6xl font-black text-[#0f8b8d] select-none drop-shadow-[0_4px_22px_rgba(15,139,141,0.5)] tracking-tight inline-block leading-none">
+            PolaXat
+          </h1>
+          <p class="text-[11px] sm:text-xs font-mono text-teal-400/80 tracking-widest uppercase mt-0.5">
+            Exclusive Sound & Visual Studio
+          </p>
+        </div>
 
-    <!-- Center Section: Mobile-stacked, Tablet/Desktop side-by-side with Exact Same Height -->
+        <!-- The Single Primary "My YouTube" Button -->
+        <div class="shrink-0 flex items-center">
+          <a
+            href="https://youtube.com/@SoundSurge3"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Subscribe to SoundSurge on YouTube"
+            class="group relative inline-flex items-center gap-2.5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-[#031d22]/90 hover:bg-[#062c33] border border-teal-500/50 hover:border-teal-400 text-white shadow-[0_0_20px_rgba(15,139,141,0.25)] hover:shadow-[0_0_28px_rgba(239,68,68,0.35),0_0_35px_rgba(45,212,191,0.45)] transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] overflow-hidden"
+          >
+            <!-- Animated shimmer light sweep on hover -->
+            <span class="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none"></span>
+
+            <!-- Official YouTube Badge with Glow & Ping -->
+            <div class="relative flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#cc0000] text-white shadow-[0_0_12px_rgba(204,0,0,0.6)] group-hover:scale-105 transition-transform">
+              <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-0.5 fill-current" viewBox="0 0 24 24">
+                <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+              </svg>
+              <span class="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-teal-300 animate-ping opacity-75"></span>
+            </div>
+
+            <!-- Button Label -->
+            <div class="flex flex-col items-start leading-tight">
+              <span class="text-xs sm:text-sm font-bold tracking-tight text-white group-hover:text-teal-200 transition-colors flex items-center gap-1.5">
+                My YouTube
+                <svg class="w-3 h-3 text-teal-400 group-hover:text-teal-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              </span>
+              <span class="text-[10px] font-mono text-teal-300/80 group-hover:text-teal-200 transition-colors">
+                @SoundSurge3
+              </span>
+            </div>
+
+            <!-- Subscribe Pill -->
+            <span class="hidden sm:inline-flex items-center ml-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-teal-950/80 text-teal-300 border border-teal-700/50 group-hover:border-red-500/50 group-hover:text-red-300 transition-colors">
+              Subscribe
+            </span>
+          </a>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- Center Section: Artist Photo + Framed Music Player -->
     <div class="w-full flex flex-col md:flex-row items-center justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-10">
       
-      <!-- Left Column: Photo Card (400:617 Proportional Aspect Ratio, No extra borders, matching desktop height) -->
+      <!-- Left Column: Photo Card (400:617 Aspect Ratio) -->
       <div 
         id="photoCard"
-        class="relative shrink-0 overflow-hidden rounded-[20px] sm:rounded-[26px] border-[2px] sm:border-[3px] border-[#0e8388] bg-[#021316] shadow-[0_15px_40px_rgba(0,0,0,0.95)] h-[270px] sm:h-[340px] md:h-[420px] lg:h-[440px] transition-all duration-300"
+        class="relative shrink-0 overflow-hidden rounded-[20px] sm:rounded-[26px] border-[2px] sm:border-[3px] border-[#0e8388] bg-[#021316] shadow-[0_15px_40px_rgba(0,0,0,0.95)] h-[280px] sm:h-[350px] md:h-[420px] lg:h-[440px] transition-all duration-300 group"
         style="aspect-ratio: 400 / 617;"
       >
-        <!-- The Artist Photo -->
+        <!-- Artist Photo -->
         <img 
           src="https://i.ibb.co/zVTQGRc/400.png" 
           alt="Bola - PolaXat" 
-          class="w-full h-full object-cover block transition-transform duration-500 hover:scale-[1.02]"
+          class="w-full h-full object-cover block transition-transform duration-700 group-hover:scale-105"
           referrerpolicy="no-referrer"
         />
 
-        <!-- Bottom shadow vignette for signature legibility -->
-        <div class="absolute inset-x-0 bottom-0 h-20 sm:h-28 bg-gradient-to-t from-black/85 via-black/40 to-transparent pointer-events-none"></div>
+        <!-- Vignette Gradient -->
+        <div class="absolute inset-x-0 bottom-0 h-24 sm:h-32 bg-gradient-to-t from-black/90 via-black/45 to-transparent pointer-events-none"></div>
+
+        <!-- Top Left Brand Badge (Cleaned) -->
+        <div class="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 z-20 flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-sm border border-teal-500/30 text-[10px] font-mono text-teal-300">
+          <span class="w-1.5 h-1.5 rounded-full bg-teal-400"></span>
+          <span>SoundSurge</span>
+        </div>
 
         <!-- Live Status Badge (Top right) -->
-        <div id="liveBadge" class="hidden absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 z-20 flex items-center gap-1 sm:gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-black/75 backdrop-blur-md border border-teal-500/50 text-[10px] sm:text-[11px] font-mono text-teal-300 shadow-md">
+        <div id="liveBadge" class="hidden absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 z-20 flex items-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-black/80 backdrop-blur-md border border-teal-500/60 text-[10px] sm:text-[11px] font-mono text-teal-300 shadow-md">
           <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-teal-400 animate-ping"></span>
           <span class="font-semibold tracking-wider">LIVE</span>
         </div>
 
         <!-- Bottom Signature "Bola" -->
-        <div class="absolute bottom-0 inset-x-0 z-20 p-3 sm:p-5 flex items-end justify-between">
-          <span class="text-xl sm:text-3xl md:text-4xl text-teal-100 font-light tracking-wide drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
-            Bola
-          </span>
-          <div id="photoEqualizer" class="hidden flex items-end gap-0.5 sm:gap-1 pb-0.5 sm:pb-1">
-            <span class="w-0.5 sm:w-1 bg-teal-300 rounded-full animate-pulse h-3 sm:h-4"></span>
-            <span class="w-0.5 sm:w-1 bg-teal-400 rounded-full animate-pulse h-5 sm:h-6"></span>
-            <span class="w-0.5 sm:w-1 bg-teal-300 rounded-full animate-pulse h-2.5 sm:h-3.5"></span>
-            <span class="w-0.5 sm:w-1 bg-teal-200 rounded-full animate-pulse h-4 sm:h-5"></span>
+        <div class="absolute bottom-0 inset-x-0 z-20 p-3.5 sm:p-5 flex items-end justify-between">
+          <div>
+            <span class="text-2xl sm:text-3xl md:text-4xl text-teal-100 font-light tracking-wide drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]">
+              Bola
+            </span>
+            <p class="text-[10px] sm:text-xs text-teal-400/80 font-mono">SoundSurge Artist</p>
+          </div>
+          <div id="photoEqualizer" class="hidden flex items-end gap-1 pb-1">
+            <span class="w-1 bg-teal-300 rounded-full animate-pulse h-4"></span>
+            <span class="w-1 bg-teal-400 rounded-full animate-pulse h-6"></span>
+            <span class="w-1 bg-teal-300 rounded-full animate-pulse h-3.5"></span>
+            <span class="w-1 bg-teal-200 rounded-full animate-pulse h-5"></span>
           </div>
         </div>
       </div>
 
-      <!-- Right Column: Framed Music Player Box (Fluid width on mobile, matching height on desktop) -->
+      <!-- Right Column: Framed Music Player Box -->
       <div class="w-full max-w-[340px] sm:max-w-[400px] md:w-[440px] lg:w-[470px] md:h-[420px] lg:h-[440px] shrink-0 rounded-[20px] sm:rounded-[26px] border-[2px] sm:border-[3px] border-[#40686d] bg-[#062c33]/95 backdrop-blur-md p-3.5 sm:p-4 md:p-5 shadow-[0_15px_40px_rgba(0,0,0,0.95)] flex flex-col justify-between gap-3">
         
         <!-- Header: Track Info & Counter -->
-        <div class="flex items-center justify-between border-b border-teal-800/30 pb-2 px-1">
+        <div class="flex items-center justify-between border-b border-teal-800/40 pb-2.5 px-1">
           <div class="min-w-0 text-left">
-            <h2 id="trackTitle" class="text-sm sm:text-base md:text-lg font-bold text-white truncate tracking-tight">Chasing The Light</h2>
-            <p id="trackArtist" class="text-[11px] sm:text-xs text-teal-300/80 font-mono mt-0.5">PolaXat</p>
+            <h2 id="trackTitle" class="text-base sm:text-lg md:text-xl font-bold text-white truncate tracking-tight font-arabic">ساكتة ليه</h2>
+            <p id="trackArtist" class="text-[11px] sm:text-xs text-teal-300/80 font-mono mt-0.5">SoundSurge · Bola</p>
           </div>
-          <div class="flex items-center gap-1.5 shrink-0 text-teal-400 font-mono text-[10px] sm:text-[11px] bg-teal-950/70 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg border border-teal-800/40">
-            <span id="trackCounter" class="tabular-nums">1 / 5</span>
+          <div class="flex items-center gap-1.5 shrink-0 text-teal-300 font-mono text-[10px] sm:text-[11px] bg-teal-950/80 px-2.5 py-1 rounded-lg border border-teal-800/50 shadow-inner">
+            <span id="trackCounter" class="tabular-nums font-semibold">1 / 4</span>
           </div>
         </div>
 
         <!-- View 1: Main Player View -->
         <div id="playerView" class="flex flex-col gap-2.5 sm:gap-3.5 my-auto">
           <!-- Real Audio Visualizer Canvas -->
-          <div class="relative w-full h-14 sm:h-16 md:h-20 overflow-hidden rounded-xl bg-black/40 border border-teal-900/30">
+          <div class="relative w-full h-16 sm:h-20 md:h-24 overflow-hidden rounded-xl bg-black/50 border border-teal-900/40 shadow-inner">
             <canvas id="visualizerCanvas" class="w-full h-full block"></canvas>
+            <span id="modeOverlay" class="absolute bottom-1 right-2 text-[9px] font-mono uppercase tracking-wider text-teal-500/40 pointer-events-none">BARS VISUALIZER</span>
           </div>
 
           <!-- Progress Bar & Timestamps -->
@@ -157,12 +225,12 @@
             <input id="progressBar" type="range" min="0" max="100" value="0" step="0.1" class="w-full h-1.5 sm:h-2" />
             <div class="flex items-center justify-between text-[11px] sm:text-xs font-mono text-teal-400/80 tabular-nums px-0.5">
               <span id="currentTimeLabel">00:00</span>
-              <span id="durationLabel">03:42</span>
+              <span id="durationLabel">03:45</span>
             </div>
           </div>
 
-          <!-- Transport Buttons (Touch-friendly) -->
-          <div class="flex items-center justify-center gap-3 sm:gap-6 pt-0.5">
+          <!-- Transport Buttons -->
+          <div class="flex items-center justify-center gap-3 sm:gap-6 pt-1">
             <!-- Shuffle -->
             <button id="shuffleBtn" title="Shuffle" class="p-2 sm:p-2.5 text-teal-400/70 hover:text-teal-200 transition-colors">
               <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h4l8 16h4M4 20h4L12 14M20 4h-4l-3 4.5"/></svg>
@@ -174,9 +242,9 @@
             </button>
 
             <!-- Play / Pause -->
-            <button id="playPauseBtn" title="Play / Pause (Space)" class="w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-gradient-to-r from-teal-400 to-[#0e8388] text-black flex items-center justify-center shadow-[0_0_20px_rgba(45,212,191,0.5)] transition-all hover:scale-105 active:scale-95">
-              <svg id="playIcon" class="w-5 h-5 sm:w-6 sm:h-6 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              <svg id="pauseIcon" class="w-5 h-5 sm:w-6 sm:h-6 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            <button id="playPauseBtn" title="Play / Pause (Space)" class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-r from-teal-400 to-[#0e8388] text-black flex items-center justify-center shadow-[0_0_22px_rgba(45,212,191,0.55)] transition-all hover:scale-105 active:scale-95">
+              <svg id="playIcon" class="w-6 h-6 sm:w-7 sm:h-7 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg id="pauseIcon" class="w-6 h-6 sm:w-7 sm:h-7 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
             </button>
 
             <!-- Next -->
@@ -192,98 +260,99 @@
           </div>
 
           <!-- Secondary Toolbar: Volume, Speed, Visualizer Mode, Tracklist -->
-          <div class="flex items-center justify-between pt-2 border-t border-teal-900/30 text-xs text-teal-400/90 gap-1.5">
-            <!-- Volume Control (Does NOT restart the track) -->
+          <div class="flex items-center justify-between pt-2.5 border-t border-teal-900/40 text-xs text-teal-300 gap-1.5">
+            <!-- Volume Control -->
             <div class="flex items-center gap-1 sm:gap-1.5">
-              <button id="muteBtn" title="Mute (M)" class="p-1 hover:text-white">
-                <svg id="volHighIcon" class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z"/></svg>
-                <svg id="volMuteIcon" class="w-3.5 h-3.5 sm:w-4 sm:h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/></svg>
+              <button id="muteBtn" title="Mute (M)" class="p-1 hover:text-white transition-colors">
+                <svg id="volHighIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z"/></svg>
+                <svg id="volMuteIcon" class="w-4 h-4 hidden text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/></svg>
               </button>
               <input id="volumeSlider" type="range" min="0" max="1" step="0.02" value="0.85" class="w-14 sm:w-18 md:w-22 h-1" />
             </div>
 
             <!-- Visualizer Mode Toggle -->
-            <button id="vizModeBtn" class="px-1.5 sm:px-2 py-0.5 rounded bg-teal-950/60 border border-teal-800/40 hover:bg-teal-900/50 uppercase font-mono text-[9px] sm:text-[10px]">
-              MODE: <span id="vizModeLabel">BARS</span>
+            <button id="vizModeBtn" class="px-2 py-0.5 rounded bg-teal-950/80 border border-teal-800/50 hover:bg-teal-900/60 uppercase font-mono text-[9px] sm:text-[10px] text-teal-300 transition-colors">
+              MODE: <span id="vizModeLabel" class="text-teal-100 font-bold">BARS</span>
             </button>
 
             <!-- Playback Speed -->
-            <button id="speedBtn" class="px-1.5 sm:px-2 py-0.5 rounded bg-teal-950/60 border border-teal-800/40 hover:bg-teal-900/50 font-mono text-[9px] sm:text-[10px]">
+            <button id="speedBtn" class="px-2 py-0.5 rounded bg-teal-950/80 border border-teal-800/50 hover:bg-teal-900/60 font-mono text-[9px] sm:text-[10px] text-teal-300 transition-colors">
               1.0x
             </button>
 
             <!-- Tracklist View Button -->
             <button id="openPlaylistBtn" title="Show Tracklist" class="p-1 hover:text-white flex items-center gap-1 text-[11px] sm:text-xs">
-              <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+              <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
             </button>
           </div>
         </div>
 
         <!-- View 2: Playlist View (Toggled) -->
         <div id="playlistView" class="hidden flex-col gap-2 h-full justify-between py-1">
-          <div class="flex items-center justify-between text-xs pb-1.5 border-b border-teal-900/30 px-1">
+          <div class="flex items-center justify-between text-xs pb-2 border-b border-teal-900/40 px-1">
             <span class="font-mono text-teal-300 text-[11px] sm:text-xs uppercase tracking-wider flex items-center gap-1.5">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke-width="2"/></svg>
-              Tracklist (5)
+              قائمة الأغاني (4)
             </span>
             <button id="closePlaylistBtn" class="text-[11px] sm:text-xs text-teal-400 hover:text-white underline cursor-pointer">
-              Back to Player
+              العودة للمشغل
             </button>
           </div>
           <div id="playlistContainer" class="flex-1 overflow-y-auto custom-scroll flex flex-col gap-1.5 pr-1"></div>
+          
+          <div class="pt-2 border-t border-teal-900/30 flex items-center justify-between text-[11px]">
+            <span class="text-teal-400/70 font-mono">SoundSurge Collection</span>
+            <span class="text-teal-400/70 font-mono">4 Tracks Available</span>
+          </div>
         </div>
 
       </div>
 
     </div>
 
-    <!-- Bottom Footer: Responsive "GOD IS LOVE" -->
-    <div class="w-full text-center mt-3 sm:mt-4 md:mt-6">
-      <span class="brand-footer text-xl sm:text-3xl md:text-4xl font-black text-[#0f8b8d] select-none drop-shadow-[0_3px_15px_rgba(15,139,141,0.3)] block leading-none">
+    <!-- Bottom Footer: "GOD IS LOVE" -->
+    <footer class="w-full text-center mt-3 sm:mt-5">
+      <span class="brand-footer text-xl sm:text-2xl md:text-3xl font-black text-[#0f8b8d] select-none drop-shadow-[0_2px_12px_rgba(15,139,141,0.3)] block leading-none">
         GOD IS LOVE
       </span>
-    </div>
+      <div class="flex items-center justify-center gap-2 mt-2 text-[11px] font-mono text-teal-500/60">
+        <span>© PolaXat & SoundSurge</span>
+      </div>
+    </footer>
 
   </div>
 
   <!-- Audio Engine & Interactive Logic -->
   <script>
-    // EXACT REAL 5 SONGS WITH RELIABLE CLOUD AUDIO URLs
+    // EXACT UPDATED 4 SONGS
     const TRACKS = [
       {
         id: 1,
-        title: 'Chasing The Light',
-        artist: 'PolaXat',
-        url: 'https://audio.jukehost.co.uk/01a0ded7-e53d-7242-88ed-d17a7c1bd33b',
-        duration: '03:42'
+        title: 'ساكتة ليه',
+        artist: 'SoundSurge · Bola',
+        url: 'https://audio.jukehost.co.uk/01a0e890-fee0-702d-9af8-0fd5d5e1e0f5',
+        duration: '03:45'
       },
       {
         id: 2,
-        title: 'Crashing To The Ground',
-        artist: 'PolaXat',
-        url: 'https://audio.jukehost.co.uk/01a0ded7-e4e3-70b0-ae1b-61f4abe3b6ea',
-        duration: '03:15'
+        title: 'محتار',
+        artist: 'SoundSurge · Bola',
+        url: 'https://audio.jukehost.co.uk/01a0e890-fea7-7176-8be4-463d6937da3d',
+        duration: '03:30'
       },
       {
         id: 3,
-        title: 'Dance in Dark',
-        artist: 'PolaXat',
-        url: 'https://audio.jukehost.co.uk/01a0ded7-e4d9-73f2-879b-ffb79782a2b4',
-        duration: '03:54'
+        title: 'واحشني بجد',
+        artist: 'SoundSurge · Bola',
+        url: 'https://audio.jukehost.co.uk/01a0e890-feb3-7340-9336-0dca38a33c6e',
+        duration: '04:12'
       },
       {
         id: 4,
-        title: 'Spark in Dark',
-        artist: 'PolaXat',
-        url: 'https://audio.jukehost.co.uk/01a0ded7-e4da-73f5-b5b6-e36ed6dd9201',
-        duration: '03:28'
-      },
-      {
-        id: 5,
-        title: 'Unstoppable Tonight',
-        artist: 'PolaXat',
-        url: 'https://audio.jukehost.co.uk/01a0ded7-e53d-7056-9ecb-21313220f99c',
-        duration: '04:02'
+        title: 'اللي راح',
+        artist: 'SoundSurge · Bola',
+        url: 'https://audio.jukehost.co.uk/01a0e890-fe81-73ba-88db-858fdcdb2888',
+        duration: '03:50'
       }
     ];
 
@@ -318,6 +387,7 @@
     const speedBtn = document.getElementById('speedBtn');
     const vizModeBtn = document.getElementById('vizModeBtn');
     const vizModeLabel = document.getElementById('vizModeLabel');
+    const modeOverlay = document.getElementById('modeOverlay');
     const progressBar = document.getElementById('progressBar');
     const currentTimeLabel = document.getElementById('currentTimeLabel');
     const durationLabel = document.getElementById('durationLabel');
@@ -334,7 +404,7 @@
     const visualizerCanvas = document.getElementById('visualizerCanvas');
     const bgCanvas = document.getElementById('bgCanvas');
 
-    // Initialize Web Audio API Analyser for real-time frequency reaction
+    // Web Audio Analyser
     function initWebAudio() {
       if (sourceNode) return;
       try {
@@ -350,11 +420,10 @@
         sourceNode.connect(analyser);
         analyser.connect(audioCtx.destination);
       } catch (err) {
-        console.warn('Web Audio initialization note:', err);
+        console.warn('Web Audio note:', err);
       }
     }
 
-    // Load track
     function loadTrack(index, autoPlay = false) {
       currentIndex = index;
       const track = TRACKS[currentIndex];
@@ -376,13 +445,12 @@
         audio.play().then(() => {
           setPlayingState(true);
         }).catch((err) => {
-          console.warn('Playback waiting on interaction:', err);
+          console.warn('Playback permission required:', err);
           setPlayingState(false);
         });
       }
     }
 
-    // Toggle Play/Pause directly to device sound hardware
     async function togglePlay() {
       initWebAudio();
       if (audioCtx && audioCtx.state === 'suspended') {
@@ -441,7 +509,7 @@
       }
     }
 
-    // Volume adjustment (Direct & isolated without restarting playback)
+    // Volume without restarting
     volumeSlider.addEventListener('input', (e) => {
       const val = parseFloat(e.target.value);
       audio.volume = val;
@@ -480,6 +548,7 @@
       const currIdx = modes.indexOf(visualizerMode);
       visualizerMode = modes[(currIdx + 1) % modes.length];
       vizModeLabel.textContent = visualizerMode.toUpperCase();
+      modeOverlay.textContent = `${visualizerMode.toUpperCase()} VISUALIZER`;
     });
 
     shuffleBtn.addEventListener('click', () => {
@@ -556,16 +625,16 @@
       TRACKS.forEach((track, idx) => {
         const item = document.createElement('div');
         const isCurrent = idx === currentIndex;
-        item.className = `flex items-center justify-between p-2 rounded-xl transition-all cursor-pointer ${
-          isCurrent ? 'bg-teal-950/80 border border-teal-600/50' : 'bg-black/30 hover:bg-teal-950/40 border border-transparent'
+        item.className = `flex items-center justify-between p-2.5 rounded-xl transition-all cursor-pointer ${
+          isCurrent ? 'bg-teal-950/90 border border-teal-500/60 shadow-[0_0_12px_rgba(15,139,141,0.4)]' : 'bg-black/35 hover:bg-teal-950/50 border border-transparent'
         }`;
         item.innerHTML = `
-          <div class="flex items-center gap-2.5 truncate">
-            <span class="w-5 text-center font-mono text-[11px] ${isCurrent ? 'text-teal-300 font-bold' : 'text-teal-400/50'}">
+          <div class="flex items-center gap-3 truncate">
+            <span class="w-6 text-center font-mono text-xs ${isCurrent ? 'text-teal-300 font-bold' : 'text-teal-400/50'}">
               ${isCurrent ? '▶' : (idx + 1).toString().padStart(2, '0')}
             </span>
-            <div class="truncate">
-              <p class="text-xs font-semibold ${isCurrent ? 'text-teal-200' : 'text-slate-200'} truncate">${track.title}</p>
+            <div class="truncate text-left">
+              <p class="text-sm font-semibold font-arabic ${isCurrent ? 'text-teal-100' : 'text-slate-200'} truncate">${track.title}</p>
               <p class="text-[10px] text-teal-400/60 font-mono">${track.artist}</p>
             </div>
           </div>
@@ -608,7 +677,7 @@
       }
     });
 
-    // Real-Time Frequency Responsive Visualizer
+    // Real-Time Visualizer
     const vCtx = visualizerCanvas.getContext('2d');
     let vPhase = 0;
 
@@ -649,11 +718,10 @@
         for (let i = 0; i < barCount; i++) {
           let value = 0;
           if (hasRealData) {
-            // Real audio frequency reactive mapping with logarithmic bass boost
             const freqRatio = Math.pow(i / barCount, 1.25);
             const index = Math.min(audioDataArray.length - 1, Math.floor(freqRatio * (audioDataArray.length * 0.85)));
             const raw = audioDataArray[index] || 0;
-            const boost = i < barCount * 0.35 ? 1.3 : 1.0;
+            const boost = i < barCount * 0.35 ? 1.35 : 1.0;
             value = Math.max(4 * window.devicePixelRatio, (raw / 255) * boost * height * 0.94);
           } else {
             const baseSin = Math.sin(vPhase + i * 0.28) * 0.5 + 0.5;
@@ -761,7 +829,7 @@
     }
     renderBg();
 
-    // Load first track (Chasing The Light)
+    // Load first track (ساكتة ليه)
     loadTrack(0);
   </script>
 </body>
